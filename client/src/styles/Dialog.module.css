@@ -1,0 +1,109 @@
+:root {
+  --dialog-inner-width: 85%;
+}
+
+.dialogOuter {
+  display: flex;
+  justify-content: center;
+  font-size: 14px;
+  max-width: 480px;
+  padding: 15px;
+  z-index: 99;
+}
+
+.dialogInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.dialogHeaderOuter {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.dialogHeaderInner {
+  display: flex;
+  align-items: center;
+  width: var(--dialog-inner-width);
+}
+
+.dialogTitle {
+  flex: 1;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.closeButton {
+  margin-left: auto;
+}
+
+.dialogInputOuter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: none;
+  width: 100%;
+}
+
+.dialogLabel {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.dialogInput {
+  display: flex;
+  flex-direction: column;
+  width: var(--dialog-inner-width);
+  margin: 10px 0;
+}
+
+.dialogInput > input {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.dialogTextarea {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  resize: none;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  min-height: 300px;
+}
+
+.fieldButtons {
+  display: flex;
+}
+
+.dialogButtonsOuter {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+}
+
+.dialogButton {
+  color: black;
+  background: lightgray;
+  font-size: 16px;
+  border: none;
+  width: var(--dialog-inner-width);
+  height: 35px;
+  margin: 10px;
+}
+
+.dialogButton:hover {
+  background: dimgray;
+}
+
+/* .infoDialogOuter {
+
+} */
