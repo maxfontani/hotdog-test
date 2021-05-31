@@ -1,12 +1,12 @@
 require("dotenv").config({ path: "../.env" });
 
-const { DATABASE_URL } = process.env;
+const { DATABASE_URI } = process.env;
 
 module.exports = {
   development: {
     client: "pg",
     connection: {
-      connectionString: DATABASE_URL,
+      connectionString: DATABASE_URI,
       ssl: false,
     },
     migrations: {
@@ -21,6 +21,7 @@ module.exports = {
     client: "postgresql",
     connection: {
       connectionString: process.env.DATABASE_URL,
+      ssl: true,
     },
     pool: {
       min: 2,
