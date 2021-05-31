@@ -7,9 +7,7 @@ module.exports = {
     client: "pg",
     connection: {
       connectionString: DATABASE_URI,
-      ssl: {
-        rejectUnauthorized: false,
-      },
+      ssl: false,
     },
     migrations: {
       directory: __dirname + "/db/migrations",
@@ -28,8 +26,7 @@ module.exports = {
       },
     },
     pool: {
-      min: 2,
-      max: 10,
+      max: 20,
     },
     migrations: {
       directory: __dirname + "/db/migrations",

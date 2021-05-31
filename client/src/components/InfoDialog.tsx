@@ -7,12 +7,12 @@ export function AddDialog(props: {
   description: string;
   isOpen: boolean;
   setShowDialog: React.Dispatch<React.SetStateAction<boolean>>;
-  setActiveId: React.Dispatch<React.SetStateAction<string>>;
+  setActiveId: React.Dispatch<React.SetStateAction<number | undefined>>;
 }): React.ReactElement {
   const { description, isOpen, setShowDialog, setActiveId } = props;
 
   const closeDialog = () => {
-    setActiveId("");
+    setActiveId(undefined);
     setShowDialog(false);
   };
 

@@ -13,14 +13,14 @@ export function EditDialog(props: {
   activeHotdog: IHotdog;
   isOpen: boolean;
   setShowDialog: React.Dispatch<React.SetStateAction<boolean>>;
-  setActiveId: React.Dispatch<React.SetStateAction<string>>;
+  setActiveId: React.Dispatch<React.SetStateAction<number | undefined>>;
 }): React.ReactElement {
   const { isOpen, setShowDialog, activeHotdog, setActiveId } = props;
 
   const dispatch = useAppDispatch();
 
   const [title, setTitle] = useState<string>(activeHotdog.title);
-  const [price, setPrice] = useState<string>(activeHotdog.price);
+  const [price, setPrice] = useState<string>(activeHotdog.price.toString());
   const [image, setImage] = useState<string>(activeHotdog.image);
   const [description, setDescription] = useState<string>(
     activeHotdog.description
@@ -31,7 +31,7 @@ export function EditDialog(props: {
   const [descriptionChanged, setDescriptionChanged] = useState<boolean>(false);
 
   const closeDialog = () => {
-    setActiveId("");
+    setActiveId(undefined);
     setShowDialog(false);
   };
 

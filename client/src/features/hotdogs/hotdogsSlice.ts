@@ -6,7 +6,7 @@ import {
   editHotdogAsync,
   deleteHotdogAsync,
 } from "./hotdogsAPI";
-import { sortByTitle } from "../utils";
+import { sortByTitle, consoleLogError } from "../utils";
 import {
   IHotdogsState,
   IHotdog,
@@ -31,21 +31,7 @@ export const getHotdogsThunk = createAsyncThunk(
     try {
       return await fetchHotdogs();
     } catch (error) {
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        console.error(error.response.data);
-        console.error(error.response.status);
-      } else if (error.request) {
-        // The request was made but no response was received
-        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-        // http.ClientRequest in node.js
-        console.warn(error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        console.error("Error", error.message);
-      }
-      return undefined;
+      return consoleLogError(error);
     }
   }
 );
@@ -57,89 +43,43 @@ export const addHotdogThunk = createAsyncThunk(
     try {
       const response = await addHotdogAsync(newHotdog);
       if (response.length && response[0].id) {
-        const addedHotdog: IHotdog = {
-          ...newHotdog,
-          id: response.id,
-          created: response.created_at || new Date(),
-          updated: response.updated_at || new Date(),
-        };
+        const addedHotdog: IHotdog = Object.assign(newHotdog, {
+          ...response[0],
+        });
         return addedHotdog;
       } else {
         return undefined;
       }
     } catch (error) {
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        console.error(error.response.data);
-        console.error(error.response.status);
-      } else if (error.request) {
-        // The request was made but no response was received
-        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-        // http.ClientRequest in node.js
-        console.warn(error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        console.error("Error", error.message);
-      }
-      return undefined;
+      return consoleLogError(error);
     }
   }
 );
 
 export const editHotdogThunk = createAsyncThunk(
   "staff/editHotdogThunk",
-  async (params: { id: string; draftHotdog: IDraftHotdog }) => {
+  async (params: { id: number; draftHotdog: IDraftHotdog }) => {
     // The value we return becomes the `fulfilled` action payload
     try {
       const { id, draftHotdog } = params;
       // Server API returns the modified hotdog draft object in an Array, e.g. [{id: 4, title: "New Title"}]
       const response = await editHotdogAsync(id, draftHotdog);
-      console.log("EDIT RESPO ", response);
       return response[0];
     } catch (error) {
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        console.error(error.response.data);
-        console.error(error.response.status);
-      } else if (error.request) {
-        // The request was made but no response was received
-        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-        // http.ClientRequest in node.js
-        console.warn(error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        console.error("Error", error.message);
-      }
-      return undefined;
+      return consoleLogError(error);
     }
   }
 );
 
 export const deleteHotdogThunk = createAsyncThunk(
   "staff/deleteHotdogThunk",
-  async (id: string) => {
+  async (id: number) => {
     // The value we return becomes the `fulfilled` action payload
     try {
       // Server API returns the deleted id in an Array, e.g. [18]
       return await deleteHotdogAsync(id);
     } catch (error) {
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        console.error(error.response.data);
-        console.error(error.response.status);
-      } else if (error.request) {
-        // The request was made but no response was received
-        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-        // http.ClientRequest in node.js
-        console.warn(error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        console.error("Error", error.message);
-      }
-      return undefined;
+      return consoleLogError(error);
     }
   }
 );
@@ -197,10 +137,10 @@ export const hotdogsSlice = createSlice({
         deleteHotdogThunk.fulfilled,
         (state, action: PayloadAction<Array<number>>) => {
           state.status = "idle";
-          if (action.payload) {
+          if (action.payload && action.payload.length) {
             state.status = "idle";
             state.allHotdogs = state.allHotdogs.filter(
-              (hotdog) => hotdog.id !== action.payload.toString()
+              (hotdog) => hotdog.id !== action.payload[0]
             );
           } else {
             alert("Oops, something went wrong..");
@@ -216,7 +156,6 @@ export const hotdogsSlice = createSlice({
         editHotdogThunk.fulfilled,
         (state, action: PayloadAction<any>) => {
           state.status = "idle";
-          console.log("PAYLO", action.payload);
           if (action.payload && Object.keys(action.payload).includes("id")) {
             state.status = "idle";
             const editedHotdog: IHotdog = state.allHotdogs.filter(
@@ -225,7 +164,7 @@ export const hotdogsSlice = createSlice({
             const editedIndex = state.allHotdogs.indexOf(editedHotdog);
             Object.assign(state.allHotdogs[editedIndex], { ...action.payload });
           } else {
-            alert("Something went wrong.. Make sure that the title is unique.");
+            alert("Something went wrong..");
             state.status = "failed";
           }
         }
@@ -242,9 +181,14 @@ export const selectAllHotdogs = (state: RootState): IHotdog[] =>
   state.hotdogs.allHotdogs;
 
 export const selectHotdogById =
-  (id: string) =>
-  (state: RootState): IHotdog =>
-    state.hotdogs.allHotdogs.filter((hotdog) => hotdog.id === id)[0];
+  (id: number | undefined) =>
+  (state: RootState): IHotdog | undefined => {
+    if (id) {
+      return state.hotdogs.allHotdogs.filter((hotdog) => hotdog.id === id)[0];
+    } else {
+      return undefined;
+    }
+  };
 
 export const selectStatus = (state: RootState): IHotdogsState["status"] =>
   state.hotdogs.status;

@@ -5,14 +5,14 @@ const defaultImg =
   "https://s3.amazonaws.com/cdn.tastesofchicago.com/images/uploads/category_956_8833.jpg";
 
 export function Hotdog(props: {
+  id: number;
   title: string;
-  price: string;
+  price: number;
   description: string;
   image?: string;
   setShowEditDialog: React.Dispatch<React.SetStateAction<boolean>>;
   setShowInfoDialog: React.Dispatch<React.SetStateAction<boolean>>;
-  setActiveId: React.Dispatch<React.SetStateAction<string>>;
-  id: string;
+  setActiveId: React.Dispatch<React.SetStateAction<number | undefined>>;
 }): React.ReactElement {
   const {
     title,

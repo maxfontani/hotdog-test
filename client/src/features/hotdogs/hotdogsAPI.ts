@@ -19,7 +19,7 @@ export function addHotdogAsync(newHotdog: INewHotdog) {
     });
 }
 
-export function editHotdogAsync(id: string, draftHotdog: IDraftHotdog) {
+export function editHotdogAsync(id: number, draftHotdog: IDraftHotdog) {
   return axios
     .post(`/api/hotdogs/${id}`, draftHotdog)
     .then((res) => res.data)
@@ -28,7 +28,7 @@ export function editHotdogAsync(id: string, draftHotdog: IDraftHotdog) {
     });
 }
 
-export function deleteHotdogAsync(id: string) {
+export function deleteHotdogAsync(id: number) {
   return axios
     .post("/api/hotdogs/delete", { id })
     .then((res) => res.data)

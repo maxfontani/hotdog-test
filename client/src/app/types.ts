@@ -1,11 +1,11 @@
 export interface IHotdog {
-  id: string;
+  id: number;
   title: string;
   image: string;
-  price: string;
+  price: number;
   description: string;
-  created: Date;
-  updated: Date;
+  created: string;
+  updated: string;
 }
 
 export interface INewHotdog {
@@ -16,10 +16,10 @@ export interface INewHotdog {
 }
 
 export interface IDraftHotdog {
-  id?: string;
+  id?: number;
   title?: string;
   image?: string;
-  price?: string;
+  price?: number;
   description?: string;
 }
 

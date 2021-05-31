@@ -5,7 +5,7 @@ import {
   addHotdogThunk,
   selectAllHotdogs,
 } from "../features/hotdogs/hotdogsSlice";
-import { checkTitleIsUnique } from "../features/utils";
+import { checkTitleIsUnique, priceCheck } from "../features/utils";
 
 import styles from "../styles/Dialog.module.css";
 
@@ -45,6 +45,8 @@ export function AddDialog(props: {
     } else {
       if (!checkTitleIsUnique(hotdogs, title)) {
         alert("Title already exists!");
+      } else if (!priceCheck(price)) {
+        alert("Improper price format!");
       } else {
         const newHotdog = {
           title: title,

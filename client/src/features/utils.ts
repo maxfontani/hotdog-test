@@ -1,3 +1,4 @@
+import { AxiosError } from "axios";
 import { IHotdog } from "../app/types";
 
 export function sortByTitle(list: IHotdog[]): IHotdog[] {
@@ -28,7 +29,25 @@ export function checkTitleIsUnique(list: IHotdog[], title: string): boolean {
 //   return re.test(url);
 // }
 
-// export function priceCheck(price: string) {
-//   const re = /^[a-z ,.'-]{3,16}$/i;
-//   return re.test(price);
-// }
+export function priceCheck(price: string) {
+  const re = /^\d{1,3}([,\\.](\d{1,2}))?$/gm;
+  return re.test(price);
+}
+
+export function consoleLogError(error: AxiosError): undefined {
+  if (error.response) {
+    // The request was made and the server responded with a status code
+    // that falls out of the range of 2xx
+    console.error(error.response.data);
+    console.error(error.response.status);
+  } else if (error.request) {
+    // The request was made but no response was received
+    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+    // http.ClientRequest in node.js
+    console.warn(error.request);
+  } else {
+    // Something happened in setting up the request that triggered an Error
+    console.error("Error", error.message);
+  }
+  return undefined;
+}

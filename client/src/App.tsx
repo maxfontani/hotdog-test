@@ -21,7 +21,8 @@ function App(): React.ReactElement {
   const [showEditDialog, setShowEditDialog] = useState<boolean>(false);
   const [showAddDialog, setShowAddDialog] = useState<boolean>(false);
   const [showInfoDialog, setShowInfoDialog] = useState<boolean>(false);
-  const [activeProductId, setActiveProductId] = useState<string>("");
+  const [activeProductId, setActiveProductId] =
+    useState<number | undefined>(undefined);
   const activeHotdog: IHotdog | undefined = useAppSelector(
     selectHotdogById(activeProductId)
   );

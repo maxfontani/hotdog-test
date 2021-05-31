@@ -13,7 +13,6 @@ const {
 
 const app = express();
 const PORT = process.env.PORT || 5001;
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
 
 // Migrate the DB and seed data
 migrateSeedDB(knex, knexConfig);
