@@ -7,7 +7,9 @@ module.exports = {
     client: "pg",
     connection: {
       connectionString: DATABASE_URI,
-      ssl: false,
+      ssl: {
+        rejectUnauthorized: false,
+      },
     },
     migrations: {
       directory: __dirname + "/db/migrations",
@@ -21,7 +23,9 @@ module.exports = {
     client: "postgresql",
     connection: {
       connectionString: process.env.DATABASE_URL,
-      ssl: true,
+      ssl: {
+        rejectUnauthorized: false,
+      },
     },
     pool: {
       min: 2,
